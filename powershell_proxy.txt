@@ -15,3 +15,39 @@ $proxy.Credentials = $proxyCredential
 
 # Now you can use Invoke-RestMethod or Invoke-WebRequest with the configured proxy
 Invoke-RestMethod -Uri "https://example.com/api/resource"
+
+=== attempt #2
+
+# Set proxy address, username, and password
+$proxyAddress = "http://proxy.example.com:8080"
+$proxyUsername = "your-username"
+$proxyPassword = "your-password"
+
+# Create a credential object for the proxy authentication
+$proxyCredential = New-Object System.Management.Automation.PSCredential -ArgumentList $proxyUsername, (ConvertTo-SecureString -String $proxyPassword -AsPlainText -Force)
+
+# Create a proxy object with the specified address
+$proxy = New-Object System.Net.WebProxy -ArgumentList $proxyAddress,$true
+
+# Assign the credential to the proxy object
+$proxy.Credentials = $proxyCredential.GetNetworkCredential()
+
+# Create a WebRequest object
+$request = [System.Net.WebRequest]::Create("https://example.com/api/resource")
+
+# Assign the proxy to the WebRequest object
+$request.Proxy = $proxy
+
+# Provide any necessary authentication for the proxy
+$request.Proxy.Credentials = $request.Proxy.Credentials = $proxy.Credentials
+
+# Perform the request and retrieve the response
+$response = $request.GetResponse()
+
+# Read the response content
+$reader = New-Object System.IO.StreamReader($response.GetResponseStream())
+$responseContent = $reader.ReadToEnd()
+
+# Output the response content
+$responseContent
+
