@@ -8,14 +8,53 @@ ssh -T -i /c/Users/kirae/.ssh/id_rsa git@github.com
 $ ssh -T git@github.com
 # Hi anApplication/open! You've successfully authenticated, but GitHub does not provide shell access.
 
-git branch -M main
+git branch -M master
 git add .
 git commit -m "first commit"
 
-export GIT_SSH_COMMAND='ssh -i C:\\Users\\kirae\\.ssh\\id_rsa'
+set GIT_SSH_COMMAND="ssh -i C:\\Users\\kirae\\.ssh\\id_rsa"
 
-git remote add origin https://github.com/anApplication/open.git
-git push -u origin main
+# do not do these:
+# git remote add origin https://github.com/anApplication/open.git
+# git remote set-url origin https://anApplication@github.com/anApplication/open.git
+# git remote set-url origin https://github.com/anApplication/open.git
+
+
+GIT_TRACE=1 git push -u origin master
+
+
+git push --ssh-command "ssh -i C:\Users\kirae\.ssh\id_rsa" origin master
+
+$ git remote -v
+origin  https://github.com/anApplication/open.git (fetch)
+origin  https://github.com/anApplication/open.git (push)
+
+$ git remote remove origin
+$ git remote add origin git@github.com:anApplication/open.git
+
+$ git remote -v
+origin  git@github.com:anApplication/open.git (fetch)
+origin  git@github.com:anApplication/open.git (push)
+
+$ GIT_TRACE=1 git push -u origin master
+00:44:24.042504 exec-cmd.c:237          trace: resolved executable dir: C:/home/apps/Git/mingw64/bin
+00:44:24.045505 git.c:459               trace: built-in: git push -u origin master
+00:44:24.046506 run-command.c:654       trace: run_command: unset GIT_PREFIX; 'ssh -i ~/.ssh/id_rsa' git@github.com 'git-receive-pack '\''anApplication/open.git'\'''
+Warning: Permanently added the ECDSA host key for IP address '140.82.113.4' to the list of known hosts.
+00:44:24.519381 run-command.c:654       trace: run_command: git pack-objects --all-progress-implied --revs --stdout --thin --delta-base-offset --progress
+00:44:24.559910 exec-cmd.c:237          trace: resolved executable dir: C:/home/apps/Git/mingw64/libexec/git-core
+00:44:24.566010 git.c:459               trace: built-in: git pack-objects --all-progress-implied --revs --stdout --thin --delta-base-offset --progress
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (8/8), 9.11 KiB | 1.52 MiB/s, done.
+Total 8 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), done.
+To github.com:anApplication/open.git
+ * [new branch]      master -> master
+branch 'master' set up to track 'origin/master'.
+
 
 
 ===
