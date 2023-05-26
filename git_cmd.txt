@@ -1,6 +1,19 @@
 git init
-git commit -ma "first commit"
+git config --global user.email "equityitvp@gmail.com"
+git config --global user.name "Alex"
+
+ssh -T -i /c/Users/kirae/.ssh/id_rsa git@github.com
+# Hi anApplication/open! You've successfully authenticated, but GitHub does not provide shell access.
+
+$ ssh -T git@github.com
+# Hi anApplication/open! You've successfully authenticated, but GitHub does not provide shell access.
+
 git branch -M main
+git add .
+git commit -m "first commit"
+
+export GIT_SSH_COMMAND='ssh -i C:\\Users\\kirae\\.ssh\\id_rsa'
+
 git remote add origin https://github.com/anApplication/open.git
 git push -u origin main
 
