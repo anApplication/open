@@ -1,1 +1,6 @@
+# help, how-to and onliners related to google developers ai: 
+# api key
+url: https://makersuite.google.com/app/apikey
 
+# my library
+url: https://makersuite.google.com/app/library
