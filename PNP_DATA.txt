@@ -1,6 +1,4 @@
-
 Background: I want to disable all keyboards except the one which I am really using - Logitech MX Keys
-This is how I am finding my Logitech devices.
 My PowerShell commands along with their output is here : https://github.com/anApplication/open/blob/master/PNP_DATA.txt
 As far as I undestood from previous chat you do not have information how to group Get-PnpDevice data.
 Looking at PNP_DATA.csv ( my Get-PnpDevice data), will you be able to analize it and create working logic that can group as much as possible (at least for my devices) ?
@@ -11,6 +9,7 @@ $PNP_DATA | ConvertTo-Csv > C:\home\data\PNP_DATA.csv
 
 The entire output of PNP_DATA.csv is here: https://github.com/anApplication/open/blob/master/PNP_DATA.csv
 
+This is how I am grouping my Logitech devices:
 $PNP=Get-PnpDevice | select * -expand HardwareID | select  Name, 
  @{N='HID';E={$_}}, 
  @{N='HID2';E={ ($_ -like '*&*')?$_ -replace '&[^&]+$':''}},
@@ -30,22 +29,14 @@ if ( $D1.HID3 -and $D2.ID1 -eq $D1.HID3 ) {
  [PSCustomObject]@{ MATCHED_ID=$D1.HID3; D1_NAME=$D1.Name; D2_NAME=$D2.Name; D1_Status=$D1.Status; D2_STATUS=$D2.Status; D1_Class=$D1.Class; D2_Class=$D2.Class; D1_InstanceID=$D1.InstanceID; D2_InstanceID=$D2.InstanceID; }
 } }  } | Sort MATCHED_ID, D1_NAME, D2_NAME
 
-$MATCHED | Select MATCHED_ID, D1_NAME, D2_NAME | ConvertTo-Csv
-"MATCHED_ID","D1_NAME","D2_NAME"
-"D0EEF6C87894","MX Master 3S","HID-compliant mouse"
-"D0EEF6C87894","MX Master 3S","Logitech Download Assistant"
-"DB209F422280","MX Keys Mini","HID Keyboard Device"
-"DB209F422280","MX Keys Mini","HID-compliant consumer control device"
-"DB209F422280","MX Keys Mini","Logitech Download Assistant"
-"EEA0065980A5","MX Keys","HID Keyboard Device"
-"EEA0065980A5","MX Keys","HID-compliant mouse"
-"EEA0065980A5","MX Keys","HID-compliant vendor-defined device"
-"EEA0065980A5","MX Keys","Logitech Download Assistant"
-
-$MATCHED | ? {$_.D1_NAME -eq 'MX Keys' } | select *  | ConvertTo-Csv
-
-	"MATCHED_ID","D1_NAME","D2_NAME","D1_Status","D2_STATUS","D1_Class","D2_Class","D1_InstanceID","D2_InstanceID"
+$MATCHED | ConvertTo-Csv
+"MATCHED_ID","D1_NAME","D2_NAME","D1_Status","D2_STATUS","D1_Class","D2_Class","D1_InstanceID","D2_InstanceID"
+"D0EEF6C87894","MX Master 3S","HID-compliant mouse","OK","Unknown","Bluetooth","Mouse","BTHLE\DEV_D0EEF6C87894\7&21DBA774&0&D0EEF6C87894","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B034_REV&0003_D0EEF6C87894&COL01\9&7827B5D&0&0000"
+"D0EEF6C87894","MX Master 3S","Logitech Download Assistant","OK","Unknown","Bluetooth","HIDClass","BTHLE\DEV_D0EEF6C87894\7&21DBA774&0&D0EEF6C87894","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B034_REV&0003_D0EEF6C87894&COL02\9&7827B5D&0&0001"
+"DB209F422280","MX Keys Mini","HID Keyboard Device","OK","Unknown","Bluetooth","Keyboard","BTHLE\DEV_DB209F422280\7&21DBA774&0&DB209F422280","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B369_REV&0007_DB209F422280&COL01\9&235D9243&0&0000"
+"DB209F422280","MX Keys Mini","HID-compliant consumer control device","OK","Unknown","Bluetooth","HIDClass","BTHLE\DEV_DB209F422280\7&21DBA774&0&DB209F422280","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B369_REV&0007_DB209F422280&COL02\9&235D9243&0&0001"
+"DB209F422280","MX Keys Mini","Logitech Download Assistant","OK","Unknown","Bluetooth","HIDClass","BTHLE\DEV_DB209F422280\7&21DBA774&0&DB209F422280","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B369_REV&0007_DB209F422280&COL03\9&235D9243&0&0002"
 "EEA0065980A5","MX Keys","HID Keyboard Device","OK","OK","Bluetooth","Keyboard","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL01\9&31D1F8C4&0&0000"
 "EEA0065980A5","MX Keys","HID-compliant mouse","OK","OK","Bluetooth","Mouse","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL02\9&31D1F8C4&0&0001"
 "EEA0065980A5","MX Keys","HID-compliant vendor-defined device","OK","OK","Bluetooth","HIDClass","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL04\9&31D1F8C4&0&0003"
-"EEA0065980A5","MX Keys","Logitech Download Assistant","OK","OK","Bluetooth","HIDClass","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL03\9&31D1F8C4&0&0002"
+"EEA0065980A5","MX Keys","Logitech Download Assistant","OK","OK","Bluetooth","HIDClass","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL03\9&31D1F8C4&0&0002"P
