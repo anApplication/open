@@ -14,6 +14,11 @@ if ( $D1.HID3 -and $D2.ID1 -eq $D1.HID3 ) {
  [PSCustomObject]@{ MATCHED_ID=$D1.HID3; D1_NAME=$D1.Name; D2_NAME=$D2.Name; D1_Status=$D1.Status; D2_STATUS=$D2.Status; D1_Class=$D1.Class; D2_Class=$D2.Class; D1_InstanceID=$D1.InstanceID; D2_InstanceID=$D2.InstanceID; }
 } }  } | Sort MATCHED_ID, D1_NAME, D2_NAME
 
+# my grouping returns 10 lines for 3 Logitech device gropups.
+D0EEF6C87894: 2 lines, 4 Get-PnpDevice data rows
+DB209F422280: 3 lines, 6 Get-PnpDevice data rows
+EEA0065980A5: 4 lines, 8 Get-PnpDevice data rows
+
 $MATCHED | ConvertTo-Csv
 "MATCHED_ID","D1_NAME","D2_NAME","D1_Status","D2_STATUS","D1_Class","D2_Class","D1_InstanceID","D2_InstanceID"
 "D0EEF6C87894","MX Master 3S","HID-compliant mouse","OK","Unknown","Bluetooth","Mouse","BTHLE\DEV_D0EEF6C87894\7&21DBA774&0&D0EEF6C87894","HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B034_REV&0003_D0EEF6C87894&COL01\9&7827B5D&0&0000"
@@ -32,10 +37,10 @@ $devices = Get-PnpDevice
 $groupedDevices = $devices | Group-Object { ($_ -split 'DEV_')[1] -split '\\|&' -join '-' }
 $groupedDevices | select -expand group | select FriendlyName,Class,Status,InstanceId,HardwareID | ConvertTo-Csv > C:\home\data\PNP_CHATGPT_GROUPS.csv
 
-
-Extract from C:\home\data\PNP_CHATGPT_GROUPS.csv for Logitech devices
+# Extract from C:\home\data\PNP_CHATGPT_GROUPS.csv for Logitech devices
+# No any grouping for Logitech Get-PnpDevice data rows  
 "MX Master 3S","MX Master 3S","Bluetooth","OK","BTHLE\DEV_D0EEF6C87894\7&21DBA774&0&D0EEF6C87894","BTHLE\Dev_d0eef6c87894"
 "MX Keys Mini","MX Keys Mini","Bluetooth","OK","BTHLE\DEV_DB209F422280\7&21DBA774&0&DB209F422280","BTHLE\Dev_db209f422280"
 "MX Keys","MX Keys","Bluetooth","OK","BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5","BTHLE\Dev_eea0065980a5"
 
-PNP_CHATGPT_GROUPS.csv : https://github.com/anApplication/open/blob/master/PNP_CHATGPT_GROUPS.csv
+PNP_CHATGPT_GROUPS.csv : https://raw.githubusercontent.com/anApplication/open/master/PNP_CHATGPT_GROUPS.csv
