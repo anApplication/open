@@ -2,8 +2,32 @@ Background: I want to disable all keyboards except the one which I am really usi
 My PowerShell commands along with their output is here : https://github.com/anApplication/open/blob/master/PNP_DATA.txt
 As far as I undestood from previous chat you do not have information how to group Get-PnpDevice data.
 Looking at PNP_DATA.csv ( my Get-PnpDevice data), will you be able to analize it and create working logic that can group as much as possible (at least for my devices) ?
+Taking into account my findings for logitech in PNP_DATA.txt, would be able to suggest the code to group (link) Get-PnpDevice output by phisical devices similar to how I grouped this data by MATCHED_ID to find Logitech devices ?
 
-Taking into account my findings for logitech in /PNP_DATA.txt, would be able to suggest the code to group (link) Get-PnpDevice output by phisical devices similar to how I grouped this data by MATCHED_ID to find Logitech devices ?
+Working with data I found that it is not clear how to get id to group data of same device.
+I was trying to construct MATCHED_ID from InstanceId/HardwareID values, but apparently my logic works well only for Logitech devices.
+
+If my guess about grouping by MATCHED_ID derived from InstanceId/HardwareID would like to understand how to read/parse instance ids. Looks like these ids are constructed from some other fields with '\' and '&' symbols used as separators.
+For example, how where these parts of instance ids can be found in Windows 10 data.
+
+
+"MX Keys"/class:Bluetooth Instance_id: "BTHLE\DEV_EEA0065980A5\7&21DBA774&0&EEA0065980A5"
+What these values mean and, apart from Get-PnpDevice's InstanceId, where these parts are stored by Windows 11:
+DEV_EEA0065980A5
+21DBA774
+EEA0065980A5
+
+"HID Keyboard Device"/class:Keyboard Instance_id: "HID\{00001812-0000-1000-8000-00805F9B34FB}_DEV_VID&02046D_PID&B35B_REV&0013_EEA0065980A5&COL01\9&31D1F8C4&0&0000"
+What these values mean and, apart from Get-PnpDevice's InstanceId, where these parts are stored by Windows 11:
+{00001812-0000-1000-8000-00805F9B34FB}
+02046D_PID
+B35B_REV
+0013_EEA0065980A5
+COL01\9
+31D1F8C4&0&0000
+
+-- Powershell Commands to group Logitech devices by 'MATCHED_ID'
+
 $PNP_DATA=Get-PnpDevice | select Name, InstanceId, Status, Class, FriendlyName, HardwareID
 $PNP_DATA | ConvertTo-Csv > C:\home\data\PNP_DATA.csv
 
